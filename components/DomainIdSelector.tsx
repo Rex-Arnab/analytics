@@ -1,4 +1,5 @@
 "use client";
+import { recordUser } from "@/lib/analytic";
 import {
   Select,
   SelectContent,
@@ -9,12 +10,22 @@ import {
 
 interface DomainIdSelectorProps {
   domainId: string;
+  sessionId: string;
   setDomainId: (domainId: string) => void;
 }
 
-function DomainIdSelector({ domainId, setDomainId }: DomainIdSelectorProps) {
+function DomainIdSelector({
+  sessionId,
+  domainId,
+  setDomainId
+}: DomainIdSelectorProps) {
   return (
-    <Select value={domainId} onValueChange={(val) => setDomainId(val)}>
+    <Select
+      value={domainId}
+      onValueChange={async (val) => {
+        await recordUser(sessionId, val);
+        setDomainId(val);
+      }}>
       <SelectTrigger className="w-full my-5">
         <SelectValue placeholder="Select Website" />
       </SelectTrigger>

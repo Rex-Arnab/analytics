@@ -13,8 +13,85 @@ import {
 } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
+import {
+  trackAddToCart,
+  trackAddToWishlist,
+  trackCheckout,
+  trackRemoveFromCart,
+  trackViewContent
+} from "@/lib/analytic";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+
+const ButtonCard = ({
+  type,
+  id,
+  title,
+  category,
+  price,
+  children
+}: {
+  type: string;
+  id: string;
+  title: string;
+  category: string;
+  price: number;
+  children: React.ReactNode;
+}) => {
+  const [clicked, setClicked] = useState(false);
+
+  return (
+    <Button
+      className={cn("w-full", clicked && "bg-green-500 hover:bg-green-600")}
+      onClick={() => {
+        setClicked(true);
+        setTimeout(() => {
+          setClicked(false);
+        }, 1000);
+        if (type === "add_to_cart") {
+          trackAddToCart({
+            id: id,
+            name: title,
+            category: category,
+            price: price
+          });
+        } else if (type === "remove_from_cart") {
+          trackRemoveFromCart({
+            id: id,
+            name: title,
+            category: category,
+            price: price
+          });
+        } else if (type === "add_to_wishlist") {
+          trackAddToWishlist({
+            id: id,
+            name: title,
+            category: category,
+            price: price
+          });
+        } else if (type === "remove_from_wishlist") {
+          trackAddToWishlist({
+            id: id,
+            name: title,
+            category: category,
+            price: price
+          });
+        } else if (type === "checkout") {
+          trackCheckout({
+            id: id,
+            name: title,
+            category: category,
+            price: price
+          });
+        }
+      }}>
+      {children}
+    </Button>
+  );
+};
 
 interface ShopCardProps {
+  id: string;
   title: string;
   description: string;
   price: number;
@@ -27,13 +104,14 @@ interface ShopCardProps {
 }
 
 const ShopCard = ({
+  id,
   title,
   description,
   price,
   image,
   rating,
   category
-}: Partial<ShopCardProps>) => {
+}: ShopCardProps) => {
   return (
     <Dialog>
       <div className="bg-white p-4 rounded-md shadow-md py-5 space-y-5 border-2 border-white">
@@ -75,7 +153,18 @@ const ShopCard = ({
           </div>
         </p>
         <DialogTrigger asChild>
-          <Button className="w-full">Buy Now</Button>
+          <Button
+            className="w-full"
+            onClick={() =>
+              trackViewContent({
+                id: id,
+                name: title,
+                category: category,
+                price: price
+              })
+            }>
+            Buy Now
+          </Button>
         </DialogTrigger>
       </div>
 
@@ -84,11 +173,49 @@ const ShopCard = ({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
             <div className="space-y-2 my-5">
-              <Button className="w-full">Add To Cart</Button>
-              <Button className="w-full">Remove From Cart</Button>
-              <Button className="w-full">Add To Wishlist</Button>
-              <Button className="w-full">Remove From Wishlist</Button>
-              <Button className="w-full">Checkout</Button>
+              <ButtonCard
+                type="add_to_cart"
+                id={id}
+                title={title}
+                category={category}
+                price={price}>
+                Add To Cart
+              </ButtonCard>
+              <ButtonCard
+                type="remove_from_cart"
+                id={id}
+                title={title}
+                category={category}
+                price={price}>
+                Remove From Cart
+              </ButtonCard>
+
+              <ButtonCard
+                type="add_to_wishlist"
+                id={id}
+                title={title}
+                category={category}
+                price={price}>
+                Add To Wishlist
+              </ButtonCard>
+
+              <ButtonCard
+                type="remove_from_wishlist"
+                id={id}
+                title={title}
+                category={category}
+                price={price}>
+                Remove From Wishlist
+              </ButtonCard>
+
+              <ButtonCard
+                type="checkout"
+                id={id}
+                title={title}
+                category={category}
+                price={price}>
+                Checkout
+              </ButtonCard>
             </div>
           </DialogDescription>
         </DialogHeader>

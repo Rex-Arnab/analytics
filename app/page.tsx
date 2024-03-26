@@ -20,7 +20,11 @@ function Home() {
         setCurrentPage={setCurrentPage}
       />
       {sessionId && (
-        <DomainIdSelector domainId={domainId} setDomainId={setDomainId} />
+        <DomainIdSelector
+          sessionId={sessionId}
+          domainId={domainId}
+          setDomainId={setDomainId}
+        />
       )}
       {domainId && sessionId && (
         <PagesNavigation
