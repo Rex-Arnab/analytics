@@ -16,7 +16,7 @@ export const recordUser = async (session_id: string, domain_id: string) => {
 
   sessionId = session_id;
   domainId = domain_id;
-  const resp = await axios.post("https://analytics.zithara.com/user", {
+  const resp = await axios.post("https://analytics.zithara.com/analytic", {
     _sessionId: session_id,
     uid: "123",
     pid: "123",

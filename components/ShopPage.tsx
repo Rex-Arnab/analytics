@@ -42,7 +42,7 @@ const ButtonCard = ({
 
   return (
     <Button
-      className={cn("w-full", clicked && "bg-green-500 hover:bg-green-600")}
+      className={cn("w-full", clicked && "bg-green-600 hover:bg-green-600")}
       onClick={() => {
         setClicked(true);
         setTimeout(() => {
