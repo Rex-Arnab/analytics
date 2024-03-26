@@ -8,18 +8,19 @@ import {
 } from "./ui/select";
 
 interface DomainIdSelectorProps {
+  domainId: string;
   setDomainId: (domainId: string) => void;
 }
 
-function DomainIdSelector({ setDomainId }: DomainIdSelectorProps) {
+function DomainIdSelector({ domainId, setDomainId }: DomainIdSelectorProps) {
   return (
-    <Select onValueChange={(val) => setDomainId(val)}>
+    <Select value={domainId} onValueChange={(val) => setDomainId(val)}>
       <SelectTrigger className="w-full my-5">
         <SelectValue placeholder="Select Website" />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="38">Bajaj</SelectItem>
-        <SelectItem value="53">Jwelwary</SelectItem>
+        <SelectItem value="53">Jewellery</SelectItem>
         <SelectItem value="123">Local</SelectItem>
       </SelectContent>
     </Select>

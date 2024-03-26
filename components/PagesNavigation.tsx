@@ -6,6 +6,7 @@ import "swiper/css";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { toast } from "./ui/use-toast";
+import { trackScreen } from "@/lib/analytic";
 
 interface CardProps {
   title: string;
@@ -61,12 +62,18 @@ const pageData = [
 
 interface PagesNavigationProps {
   domainId: string;
+  sessionId: string;
   setCurrentPage: (pageId: number) => void;
 }
-function PagesNavigation({ domainId, setCurrentPage }: PagesNavigationProps) {
+function PagesNavigation({
+  domainId,
+  sessionId,
+  setCurrentPage
+}: PagesNavigationProps) {
   const [activeIndex, setActiveIndex] = useState(-1);
 
-  const handlePageVisit = (pageId: number) => {
+  const handlePageVisit = async (pageId: number) => {
+    await trackScreen(sessionId, domainId, pageData[pageId].title);
     toast({
       title: `Navigating`,
       description: `${pageData[pageId].title}`
